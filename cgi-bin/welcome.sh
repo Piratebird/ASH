@@ -30,6 +30,7 @@ ${BOLD_GREEN}└─────────────────────�
 
  ${BOLD_YELLOW}Gobos${RESET} (completly did not steal the idea from ysap)
 
+ ${BOLD_GREEN}\$ curl${RESET} ${BLUE}${HOST}/cgi-bin/dashboard.sh${RESET}   ${WHITE}Terminal Dashboard Overview${RESET}
  ${BOLD_GREEN}\$ curl${RESET} ${BLUE}${HOST}/cgi-bin/status.sh${RESET}      ${WHITE}Get JSON server status${RESET}
  ${BOLD_GREEN}\$ curl${RESET} ${BLUE}${HOST}/cgi-bin/client.sh${RESET}      ${WHITE}Get your client/network info${RESET}
  ${BOLD_GREEN}\$ curl${RESET} ${BLUE}${HOST}/cgi-bin/device_info.sh${RESET} ${WHITE}Get your local device specs${RESET}

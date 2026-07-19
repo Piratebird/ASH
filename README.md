@@ -31,6 +31,8 @@
 
 ASH is an API and Web Dashboard written entirely in Bash (sometimes I wonder why I do this to myself). Instead of using bloated JS frameworks or Python, this bozo uses `lighttpd` and raw bash CGI scripts to monitor your server and serve web endpoints.
 
+check live demo: [ASH](https://ash-r5tv.onrender.com/cgi-bin/dashboard.sh)
+
 Some people call it spyware, I call it spaghetti.
 ---
 

@@ -1,0 +1,103 @@
+<div class="card section" style="margin-bottom: 20px;">
+    <div class="card-label" style="display: flex; justify-content: space-between;">
+        <span>Server-Side Detection</span>
+        <span style="color: var(--teal); font-size: 0.8em;">HTTP Headers</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+        <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
+            <div style="font-size: 0.8em; color: var(--subtext0);">IP Address</div>
+            <div style="font-family: monospace; color: var(--text);">${CLIENT_IP}</div>
+        </div>
+        <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
+            <div style="font-size: 0.8em; color: var(--subtext0);">Device Type</div>
+            <div style="font-family: monospace; color: var(--text);">${DEVICE_TYPE}</div>
+        </div>
+        <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
+            <div style="font-size: 0.8em; color: var(--subtext0);">OS</div>
+            <div style="font-family: monospace; color: var(--text);">${OS}</div>
+        </div>
+        <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
+            <div style="font-size: 0.8em; color: var(--subtext0);">Browser</div>
+            <div style="font-family: monospace; color: var(--text);">${BROWSER}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card section">
+    <div class="card-label" style="display: flex; justify-content: space-between;">
+        <span>Client-Side Detection</span>
+        <span style="color: var(--mauve); font-size: 0.8em;">JavaScript Web APIs</span>
+    </div>
+    
+    <div id="js-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+        <!-- Populated by JS -->
+        <div style="text-align: center; color: var(--subtext0); padding: 20px;">Scanning device...</div>
+    </div>
+</div>
+
+<script>
+    // i hate javascript i miss python </3
+    
+async function collectDeviceInfo() {
+    const data = {};
+    
+    data['CPU Cores'] = navigator.hardwareConcurrency ? navigator.hardwareConcurrency + ' logical cores' : 'N/A';
+    data['Memory'] = navigator.deviceMemory ? navigator.deviceMemory + ' GB (approx)' : 'N/A';
+    data['Screen'] = screen.width + 'x' + screen.height + ' @' + (window.devicePixelRatio || 1) + 'x';
+    data['Viewport'] = window.innerWidth + 'x' + window.innerHeight;
+    data['Timezone'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    data['Language'] = navigator.language;
+    data['Platform'] = navigator.platform;
+    data['Touch Points'] = navigator.maxTouchPoints > 0 ? navigator.maxTouchPoints + ' points' : 'No Touch';
+    data['Dark Mode'] = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Enabled' : 'Disabled';
+    data['Color Depth'] = screen.colorDepth ? screen.colorDepth + '-bit' : 'N/A';
+    data['Cookies'] = navigator.cookieEnabled ? 'Enabled' : 'Disabled';
+    data['Network'] = navigator.connection ? navigator.connection.effectiveType : 'N/A';
+    
+    // Battery
+    try {
+        const bat = await navigator.getBattery();
+        data['Battery'] = Math.round(bat.level * 100) + '% ' + (bat.charging ? '⚡' : '🔋');
+    } catch (e) {
+        data['Battery'] = 'N/A';
+    }
+    
+    // GPU via WebGL
+    try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (gl) {
+            const ext = gl.getExtension('WEBGL_debug_renderer_info');
+            if (ext) {
+                data['GPU'] = gl.getParameter(ext.UNMASKED_RENDERER_WEBGL);
+            } else {
+                data['GPU'] = 'WebGL supported, no renderer info';
+            }
+        } else {
+            data['GPU'] = 'WebGL not supported';
+        }
+    } catch (e) {
+        data['GPU'] = 'N/A';
+    }
+    
+    return data;
+}
+
+collectDeviceInfo().then(data => {
+    const grid = document.getElementById('js-grid');
+    grid.innerHTML = '';
+    
+    for (const [label, value] of Object.entries(data)) {
+        const div = document.createElement('div');
+        div.style.background = 'var(--surface0)';
+        div.style.padding = '10px';
+        div.style.borderRadius = '6px';
+        
+        div.innerHTML = `
+            <div style="font-size: 0.8em; color: var(--subtext0);">${label}</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${value}">${value}</div>
+        `;
+        grid.appendChild(div);
+    }
+});
+</script>

@@ -1,0 +1,135 @@
+
+    <pre class="ascii-logo">
+   ░███      ░██████   ░██     ░██ 
+  ░██░██    ░██   ░██  ░██     ░██ 
+ ░██  ░██  ░██         ░██     ░██ 
+░█████████  ░████████  ░██████████ 
+░██    ░██         ░██ ░██     ░██ 
+░██    ░██  ░██   ░██  ░██     ░██ 
+░██    ░██   ░██████   ░██     ░██ 
+    </pre>
+
+    <p class="joke-text">
+      <span id="val-joke">Loading joke...</span>
+    </p>
+    <div style="text-align:center">
+      <button class="btn btn-outline joke-reload" id="val-joke-reload" onclick="loadJoke()" style="display:none">new joke</button>
+    </div>
+
+    <h2>
+      <span class="status-dot"></span> Server Dashboard
+      <span
+        style="font-size: 0.8rem; color: var(--muted); margin-left: 15px"
+        id="val-time"
+        >Fetching...</span
+      >
+    </h2>
+
+    <div class="dashboard">
+      <div class="card">
+        <div class="card-label">Hostname</div>
+        <div class="card-value" id="val-host">...</div>
+      </div>
+      <div class="card">
+        <div class="card-label">OS</div>
+        <div class="card-value" id="val-os">...</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Uptime</div>
+        <div class="card-value" id="val-uptime">...</div>
+      </div>
+      <div class="card">
+        <div class="card-label">CPU Cores & Load</div>
+        <div class="card-value" id="val-load">...</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Memory Usage</div>
+        <div class="card-value" id="val-mem-text">...</div>
+        <div class="bar-track">
+          <div class="bar-fill" id="val-mem-bar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Disk Usage (/)</div>
+        <div class="card-value" id="val-disk-text">...</div>
+        <div class="bar-track">
+          <div class="bar-fill" id="val-disk-bar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="card section">
+        <div class="card-label">Top Processes</div>
+        <pre id="val-procs">...</pre>
+      </div>
+      <div class="card section">
+        <div class="card-label">Docker Containers</div>
+        <pre id="val-docker">...</pre>
+      </div>
+      <div class="card section">
+        <div class="card-label">Listening Ports</div>
+        <div class="card-value" id="val-ports">...</div>
+      </div>
+    </div>
+
+    <script>
+      // Helper function to colorize progress bars based on percentage
+      function updateBar(barElement, percent) {
+        barElement.style.width = percent + "%";
+        if (percent < 70)
+          barElement.style.backgroundColor = "#10b981"; // Green
+        else if (percent < 90)
+          barElement.style.backgroundColor = "#f59e0b"; // Yellow
+        else barElement.style.backgroundColor = "#ef4444"; // Red
+      }
+
+      async function refresh() {
+        try {
+          const res = await fetch("/cgi-bin/status.sh");
+          const data = await res.json();
+
+          document.getElementById("val-time").innerText =
+            "Last updated: " + data.timestamp;
+          document.getElementById("val-host").innerText = data.hostname;
+          document.getElementById("val-os").innerText = data.os;
+          document.getElementById("val-uptime").innerText = data.uptime;
+          document.getElementById("val-load").innerText =
+            data.cpu_cores + " cores | " + data.load;
+
+          document.getElementById("val-mem-text").innerText = data.memory.text;
+          updateBar(
+            document.getElementById("val-mem-bar"),
+            data.memory.percent,
+          );
+
+          document.getElementById("val-disk-text").innerText = data.disk.text;
+          updateBar(document.getElementById("val-disk-bar"), data.disk.percent);
+
+          document.getElementById("val-procs").innerText = data.top_processes;
+          document.getElementById("val-docker").innerText = data.docker;
+          document.getElementById("val-ports").innerText = data.ports;
+        } catch (err) {
+          console.error("Failed to fetch status:", err);
+          document.getElementById("val-time").innerText =
+            "Connection lost. Retrying...";
+        }
+      }
+
+      // Fetch joke once on page load (not on refresh loop)
+      async function loadJoke() {
+        try {
+          const res = await fetch("/cgi-bin/joke.sh");
+          const data = await res.json();
+          document.getElementById("val-joke").innerText = `"${data.joke}"`;
+          document.getElementById("val-joke-reload").style.display = "";
+        } catch (err) {
+          document.getElementById("val-joke").style.display = "none";
+        }
+      }
+
+      // Fetch immediately, then every 5 seconds
+      loadJoke();
+      refresh();
+      setInterval(refresh, 5000);
+    </script>

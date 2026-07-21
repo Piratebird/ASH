@@ -5,7 +5,8 @@ source "$(dirname "${BASH_SOURCE[0]}")/../libs/template.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/../libs/colors.sh"
 
 AGENT=$(get_user_agent)
-HOST="${HTTP_HOST:-localhost:8080}"
+PROTO="${HTTP_X_FORWARDED_PROTO:-http}"
+HOST="${PROTO}://${HTTP_HOST:-localhost:8080}"
 HOST_ESCAPED=$(echo "$HOST" | html_escape)
 export HOST HOST_ESCAPED
 
@@ -41,7 +42,7 @@ ${BOLD_GREEN}└─────────────────────�
  ${BOLD_GREEN}\$ curl${RESET} ${BLUE}${HOST}/cgi-bin/pokemon.sh${RESET}     ${WHITE}View ASH Pokemon Cards${RESET}
  ${BOLD_GREEN}\$ curl${RESET} ${BLUE}${HOST}/cgi-bin/scan.sh${RESET}        ${WHITE}View your saved remote scan data${RESET}
 
- ${BOLD_GREEN}\$ curl${RESET} ${BLUE}-s ${HOST}/cgi-bin/agent.sh | bash${RESET}
+ ${BOLD_GREEN}\$ curl${RESET} ${BLUE}-sL ${HOST}/cgi-bin/agent.sh | bash${RESET}
    └─ ${WHITE}Run the remote scanner agent on your local machine${RESET}
 
 ${BOLD_PURPLE}Privacy Note:${RESET} ${WHITE}This is purely educational analytics shenanigans for the heck of it.${RESET}
@@ -52,7 +53,7 @@ EOF
 else
     
     # --- BROWSER MODE (HTML) ---#
-    export INSTRUCTION_CMD="curl -s http://${HOST_ESCAPED}/cgi-bin/agent.sh | bash"
+    export INSTRUCTION_CMD="curl -sL ${HOST_ESCAPED}/cgi-bin/agent.sh | bash"
     
     render_header "Welcome to ASH"
     render_page "welcome.html" '${HOST_ESCAPED} ${INSTRUCTION_CMD}'

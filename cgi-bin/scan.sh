@@ -58,7 +58,8 @@ show_field() {
 # GET HANDLER (Display all client scan results) ---#
 handle_get() {
     AGENT=$(get_user_agent)
-    HOST="${HTTP_HOST:-YOUR_SERVER}"
+    PROTO="${HTTP_X_FORWARDED_PROTO:-http}"
+    HOST="${PROTO}://${HTTP_HOST:-YOUR_SERVER}"
     HOST_ESCAPED=$(echo "$HOST" | html_escape)
     
     CLIENT_IP=$(get_real_ip)
@@ -79,7 +80,7 @@ handle_get() {
             echo "  ${BOLD_RED}No scan recorded for your IP (${CLIENT_IP}) yet.${RESET}"
             echo ""
             echo "  ${BOLD_PURPLE}To scan your machine, run:${RESET}"
-            echo "    curl -s http://${HOST}/cgi-bin/agent.sh | bash"
+            echo "    curl -sL ${HOST}/cgi-bin/agent.sh | bash"
             echo ""
         else
             echo "  ${BOLD_CYAN}Your IP${RESET}     : ${WHITE}${CLIENT_IP}${RESET}"
@@ -111,7 +112,7 @@ EOF
     <div style="text-align: center; color: var(--subtext0); padding: 20px;">
         <p>No scan recorded for your IP (${CLIENT_IP}) yet.</p>
         <p>To scan your machine, run:</p>
-        <pre style="background: var(--surface0); padding: 10px; border-radius: 6px; color: var(--text); display: inline-block; margin-top: 10px;"><code>curl -s http://${HOST_ESCAPED}/cgi-bin/agent.sh | bash</code></pre>
+        <pre style="background: var(--surface0); padding: 10px; border-radius: 6px; color: var(--text); display: inline-block; margin-top: 10px;"><code>curl -sL ${HOST_ESCAPED}/cgi-bin/agent.sh | bash</code></pre>
     </div>
 EOF
         else

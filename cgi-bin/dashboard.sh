@@ -5,7 +5,8 @@ source "$(dirname "${BASH_SOURCE[0]}")/../libs/template.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/../libs/colors.sh"
 
 AGENT=$(get_user_agent)
-HOST="${HTTP_HOST:-localhost:8080}"
+PROTO="${HTTP_X_FORWARDED_PROTO:-http}"
+HOST="${PROTO}://${HTTP_HOST:-localhost:8080}"
 
 if [[ "$AGENT" == curl* ]]; then
     

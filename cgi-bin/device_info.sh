@@ -7,7 +7,8 @@ AGENT=$(get_user_agent)
 CLIENT_IP=$(get_real_ip)
 LANG="${HTTP_ACCEPT_LANGUAGE:-Unknown}"
 ENCODING="${HTTP_ACCEPT_ENCODING:-Unknown}"
-HOST="${HTTP_HOST:-localhost:8080}"
+PROTO="${HTTP_X_FORWARDED_PROTO:-http}"
+HOST="${PROTO}://${HTTP_HOST:-localhost:8080}"
 
 # Parse OS from User-Agent
 parse_os() {
@@ -69,7 +70,7 @@ if [[ "$AGENT" == curl* ]]; then
     echo "  ${BOLD_CYAN}Encoding${RESET}     : ${WHITE}${ENCODING}${RESET}"
     echo ""
     echo "  ${BOLD_PURPLE}For full system info, run:${RESET}"
-    echo "    curl -s http://${HOST}/cgi-bin/agent.sh | bash"
+    echo "    curl -sL ${HOST}/cgi-bin/agent.sh | bash"
     echo ""
     echo "${BOLD_WHITE}===========================================================${RESET}"
 else

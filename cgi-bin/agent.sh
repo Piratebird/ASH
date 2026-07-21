@@ -8,7 +8,7 @@
 # WHAT THIS DOES:
 # Returns a Bash script as plain text. When a client runs:
 #
-#   curl -s http://YOUR_SERVER/cgi-bin/agent.sh | bash
+#   curl -sL https://YOUR_SERVER/cgi-bin/agent.sh | bash
 #
 # The script runs on THEIR machine, collects their system info,
 # and POSTs it back to the server via /cgi-bin/scan.sh.
@@ -34,7 +34,8 @@ send_200_text
 
 # HTTP_HOST is a CGI env var containing the host:port the client connected to.
 # We'll inject this into the script so the client knows where to POST back to.
-SERVER_HOST="${HTTP_HOST:-localhost:8080}"
+PROTO="${HTTP_X_FORWARDED_PROTO:-http}"
+SERVER_HOST="${PROTO}://${HTTP_HOST:-localhost:8080}"
 
 # ===========================================================================
 # PART 1: Unquoted heredoc - variables ARE expanded by the server
@@ -64,7 +65,7 @@ EOF
 cat << 'EOF'
 
 # Build the URL to POST back to using the SERVER variable from above.
-SCAN_URL="http://${SERVER}/cgi-bin/scan.sh"
+SCAN_URL="${SERVER}/cgi-bin/scan.sh"
 
 echo ""
 echo "${BOLD_WHITE}===========================================================${RESET}"

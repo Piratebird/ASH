@@ -202,7 +202,7 @@ HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
 BODY=$(echo "$RESPONSE" | sed '$d')
 
 if [ "$HTTP_CODE" = "200" ]; then
-    echo "${BOLD_GREEN}Scan saved successfully! Your data is now on the server.${RESET}"
+    echo "${BOLD_GREEN}Scan saved successfully! Your data is now in the container (technically not a server, but it reads it, so whatever).${RESET}"
 else
     echo "${BOLD_RED}Warning: Server returned HTTP ${HTTP_CODE}${RESET}"
     echo "Response: ${BODY}"

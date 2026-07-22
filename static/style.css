@@ -17,7 +17,7 @@ body {
     overflow-x: clip;
 }
 
-.navbar { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.navbar { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); line-height: 1.8; }
 .navbar a { color: var(--accent); text-decoration: none; margin-right: 15px; }
 
 /* Dashboard Layout */

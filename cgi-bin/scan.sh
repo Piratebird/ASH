@@ -112,7 +112,7 @@ EOF
     <div style="text-align: center; color: var(--subtext0); padding: 20px;">
         <p>No scan recorded for your IP (${CLIENT_IP}) yet.</p>
         <p>To scan your machine, run:</p>
-        <pre style="background: var(--surface0); padding: 10px; border-radius: 6px; color: var(--text); display: inline-block; margin-top: 10px;"><code>curl -sL ${HOST_ESCAPED}/cgi-bin/agent.sh | bash</code></pre>
+        <pre style="background: var(--surface0); padding: 10px; border-radius: 6px; color: var(--text); display: inline-block; margin-top: 10px; max-width: 100%; overflow-x: auto;"><code>curl -sL ${HOST_ESCAPED}/cgi-bin/agent.sh | bash</code></pre>
     </div>
 EOF
         else
@@ -122,35 +122,35 @@ EOF
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
         <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
             <div style="font-size: 0.8em; color: var(--subtext0);">Your IP</div>
-            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis;">${CLIENT_IP}</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; word-break: break-all;">${CLIENT_IP}</div>
         </div>
         <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
             <div style="font-size: 0.8em; color: var(--subtext0);">User</div>
-            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis;">$(show_field 'user' "$FILE" | html_escape)</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; word-break: break-all;">$(show_field 'user' "$FILE" | html_escape)</div>
         </div>
         <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
             <div style="font-size: 0.8em; color: var(--subtext0);">Hostname</div>
-            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis;">$(show_field 'hostname' "$FILE" | html_escape)</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; word-break: break-all;">$(show_field 'hostname' "$FILE" | html_escape)</div>
         </div>
         <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
             <div style="font-size: 0.8em; color: var(--subtext0);">OS</div>
-            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis;">$(show_field 'os' "$FILE" | html_escape)</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; word-break: break-all;">$(show_field 'os' "$FILE" | html_escape)</div>
         </div>
         <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
             <div style="font-size: 0.8em; color: var(--subtext0);">Home Disk</div>
-            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis;">$(show_field 'disk_home' "$FILE" | html_escape)</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; word-break: break-all;">$(show_field 'disk_home' "$FILE" | html_escape)</div>
         </div>
         <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
             <div style="font-size: 0.8em; color: var(--subtext0);">Storage (/)</div>
-            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis;">$(show_field 'storage' "$FILE" | html_escape)</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; word-break: break-all;">$(show_field 'storage' "$FILE" | html_escape)</div>
         </div>
         <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
             <div style="font-size: 0.8em; color: var(--subtext0);">Memory</div>
-            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis;">$(show_field 'memory' "$FILE" | html_escape)</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; word-break: break-all;">$(show_field 'memory' "$FILE" | html_escape)</div>
         </div>
         <div style="background: var(--surface0); padding: 10px; border-radius: 6px;">
             <div style="font-size: 0.8em; color: var(--subtext0);">Scan Time</div>
-            <div style="font-family: monospace; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis;">$(show_field 'scan_time' "$FILE" | html_escape)</div>
+            <div style="font-family: monospace; color: var(--text); margin-top: 4px; word-break: break-all;">$(show_field 'scan_time' "$FILE" | html_escape)</div>
         </div>
     </div>
 EOF
